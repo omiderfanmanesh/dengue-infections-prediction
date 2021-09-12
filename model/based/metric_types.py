@@ -10,4 +10,5 @@ class MetricTypes:
     PRECISION = 5
     RECALL = 6
     ACCURACY = 7
-    ALL = 7
+
+    MEAN_ABSOLUTE_ERROR = 8

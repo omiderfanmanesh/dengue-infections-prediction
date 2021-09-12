@@ -11,11 +11,9 @@ from utils import RuntimeMode
 
 
 def main():
-    bank = load(cfg)  # create dataset object instance
-    bank.load_dataset()  # load data from csv file
-    bank.age()  # convert the range of the age's values to [1,2,3,4]
-    bank.duration()  # convert the range of the duration's values to [1,2,3,4,5]
-    bank.drop_cols()  # drop columns
+    den = load(cfg)  # create dataset object instance
+    den.load_dataset()  # load data from csv file
+    den.drop_cols()  # drop columns
 
     model_selection = cfg.BASIC.MODEL  # select the model
     if model_selection == Model.SVM:
@@ -35,14 +33,14 @@ def main():
 
     runtime_mode = cfg.BASIC.RUNTIME_MODE  # mode that you want to run this code
     if runtime_mode == RuntimeMode.TRAIN:
-        do_train(cfg=cfg, dataset=bank, model=model, encoder=encoder, scaler=scaler, pca=pca)
+        do_train(cfg=cfg, dataset=den, model=model, encoder=encoder, scaler=scaler, pca=pca)
     elif runtime_mode == RuntimeMode.CROSS_VAL:
-        do_cross_val(cfg=cfg, dataset=bank, model=model, encoder=encoder, scaler=scaler, pca=pca)
+        do_cross_val(cfg=cfg, dataset=den, model=model, encoder=encoder, scaler=scaler, pca=pca)
     elif runtime_mode == RuntimeMode.TUNING:
-        do_fine_tune(cfg=cfg, dataset=bank, model=model, encoder=encoder, scaler=scaler,
+        do_fine_tune(cfg=cfg, dataset=den, model=model, encoder=encoder, scaler=scaler,
                      method=TuningMode.GRID_SEARCH)
     if runtime_mode == RuntimeMode.FEATURE_IMPORTANCE:
-        do_train(cfg=cfg, dataset=bank, model=model, encoder=encoder, scaler=scaler, pca=pca, feature_importance=True)
+        do_train(cfg=cfg, dataset=den, model=model, encoder=encoder, scaler=scaler, pca=pca, feature_importance=True)
 
 
 if __name__ == '__main__':

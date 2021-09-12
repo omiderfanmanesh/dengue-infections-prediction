@@ -86,7 +86,8 @@ class BasedPlot:
         plt.show()
 
     def __feature_distribution(self, df, col, is_numerical=True, trans=None):
-        df[col] = self.dataset.transform(df[col], trans)
+        if trans is not None:
+            df[col] = self.dataset.transformation(df[col], trans)
         if is_numerical:
             g = sns.FacetGrid(df, col=self.target, hue=self.target)
             g.map(sns.histplot, col)
@@ -147,7 +148,7 @@ class BasedPlot:
             print('transformation is not possible for sting data!!!')
             trans = TransformersType.NONE
         else:
-            df[col] = self.dataset.transform(df[col], trans)
+            df[col] = self.dataset.transformation(df[col], trans)
 
         params = {
             'data': df,
@@ -168,7 +169,7 @@ class BasedPlot:
             print('transformation is not possible for sting data!!!')
             trans = TransformersType.NONE
         else:
-            df[col] = self.dataset.transform(df[col], trans)
+            df[col] = self.dataset.transformation(df[col], trans)
 
         params = {
             'data': df,
@@ -192,7 +193,7 @@ class BasedPlot:
     def box_by_col(self, col, title=None, trans=TransformersType.NONE):
         df = self.df.copy()
         if is_numeric_dtype(df[col]):
-            df[col] = self.dataset.transform(df[col], trans)
+            df[col] = self.dataset.transformation(df[col], trans)
             params = {
                 'data': df,
                 'x': col,
@@ -208,9 +209,9 @@ class BasedPlot:
 
     def box(self, col, title=None, trans=TransformersType.NONE):
         df = self.df.copy()
-        df[col] = self.dataset.transform(df[col], trans)
+        df[col] = self.dataset.transformation(df[col], trans)
         if is_numeric_dtype(df[col]):
-            df[col] = self.dataset.transform(df[col], trans)
+            df[col] = self.dataset.transformation(df[col], trans)
             params = {
                 'data': df,
                 'x': col,
@@ -231,7 +232,7 @@ class BasedPlot:
     def violin_by_col(self, col, title=None, trans=TransformersType.NONE):
         df = self.df.copy()
         if is_numeric_dtype(df[col]):
-            df[col] = self.dataset.transform(df[col], trans)
+            df[col] = self.dataset.transformation(df[col], trans)
 
             params = {
                 'data': df,
@@ -250,7 +251,7 @@ class BasedPlot:
     def violin(self, col, title=None, trans=TransformersType.NONE):
         df = self.df.copy()
         if is_numeric_dtype(df[col]):
-            df[col] = self.dataset.transform(df[col], trans)
+            df[col] = self.dataset.transformation(df[col], trans)
 
             params = {
                 'data': df,
@@ -275,7 +276,7 @@ class BasedPlot:
         _corr = data.corr(method=method)
         _mask = np.triu(np.ones_like(_corr, dtype=bool))
         # Set up the matplotlib figure
-        f, ax = plt.subplots(figsize=(11, 9))
+        f, ax = plt.subplots(figsize=(13, 11))
         # Generate a custom diverging colormap
         _cmap = sns.diverging_palette(230, 20, as_cmap=True)
 

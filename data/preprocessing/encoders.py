@@ -1,5 +1,6 @@
 #  Copyright (c) 2021, Omid Erfanmanesh, All rights reserved.
 
+import joblib
 from category_encoders import OneHotEncoder, OrdinalEncoder, BinaryEncoder
 from sklearn.preprocessing import LabelEncoder
 from tqdm import tqdm
@@ -113,6 +114,8 @@ class Encoders:
                                                               y_train=y_train, y_test=y_test)
                 else:
                     data = self.__get_encoded_data(enc=enc, data=data, y=y)
+            # save encoder obj
+            joblib.dump(enc, filename=f"{self._cfg.BASIC.OUTPUT}{col}_{enc_name}_{encode_type}.joblib")
 
         if data is None and y is None:
             return X_train, X_test
@@ -152,3 +155,6 @@ class Encoders:
         """
         enc, enc_name = self.__get_encoder(encoder_type=encode_type, col=col)
         return enc.fit_transform(data[col])
+
+    def encode_by_enc(self, enc, data):
+        return enc.transform(data)

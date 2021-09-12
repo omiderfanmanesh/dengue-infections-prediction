@@ -1,8 +1,8 @@
 #  Copyright (c) 2021, Omid Erfanmanesh, All rights reserved.
 
-from data.bank import Bank
+from data.dengue_infection import DengueInfection
 
 
-def load(cfg):
-    bank = Bank(cfg=cfg)
-    return bank
+def load(cfg,development=True):
+    den = DengueInfection(cfg=cfg,development=development)
+    return den

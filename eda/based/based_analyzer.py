@@ -10,6 +10,8 @@ from pandas.api.types import is_numeric_dtype
 
 from data.based.transformers_enums import TransformersType
 
+np.seterr(all='warn')
+
 
 class BasedAnalyzer:
     def __init__(self, dataset, cfg):
@@ -24,14 +26,23 @@ class BasedAnalyzer:
             print("--------------- about dataset  -----------------")
             print(self.dataset.about)
             print('\n')
-            print("--------------- description.txt ----------------")
+            print("--------------- dataframe info ----------------")
             pprint(self.info())
             print('\n')
-            print("--------------- description.txt ----------------")
+            print("---------- dataframe description --------------")
             pprint(self.describe_dataframe())
             print('\n')
 
         if col is None:
+            print("--------------- dataframe info ----------------")
+            pprint(self.info())
+            print('\n')
+            print("---------- dataframe description --------------")
+            pprint(self.describe_dataframe())
+            print('\n')
+            print("--------------- dataframe columns -----------------")
+            pprint(self.df.columns)
+            print('\n')
             print("--------------- nan Values -----------------")
             print(self.missing_values().head(20))
             print('\n')

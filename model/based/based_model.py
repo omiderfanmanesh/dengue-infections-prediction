@@ -2,14 +2,14 @@
 
 from pprint import pprint
 from time import time
-
+import joblib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from dtreeviz.trees import dtreeviz  # remember to load the package
 # Metrics
-from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
+from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score,mean_absolute_error,mean_squared_error
 from sklearn.metrics import plot_confusion_matrix
 from sklearn.model_selection import GridSearchCV
 from skopt import BayesSearchCV
@@ -28,6 +28,7 @@ class BasedModel:
         self.use_for_feature_importance = False
         self.fine_tune_params = {}
         self._confusion_matrix = cfg.EVALUATION.CONFUSION_MATRIX
+        self._save_model_address = cfg.BASIC.SAVE_MODEL
 
     def train(self, X_train, y_train):
         """
@@ -59,6 +60,9 @@ class BasedModel:
                                   display_labels=target_labels,
                                   normalize=normalize)
             plt.show()
+
+    def prediction(self,data):
+        return self.model.predict(data)
 
     def metric(self, y_true=None, y_pred=None):
         """
@@ -104,6 +108,8 @@ class BasedModel:
                 return recall_score(y_true, y_pred)
             elif metric_type == MetricTypes.ACCURACY:
                 return accuracy_score(y_true, y_pred)
+            elif metric_type == MetricTypes.MEAN_ABSOLUTE_ERROR:
+                return mean_absolute_error(y_true, y_pred)
 
     def hyper_parameter_tuning(self, X, y, title='', method=TuningMode.GRID_SEARCH):
         """
@@ -207,6 +213,12 @@ class BasedModel:
                        class_names=list(class_names))
         viz.save("decision_tree.svg")
         viz.view()
+
+    def save(self):
+        joblib.dump(self.model, self._save_model_address)
+
+    def load(self):
+        self.model = joblib.load(self._save_model_address)
 
     @property
     def model(self):

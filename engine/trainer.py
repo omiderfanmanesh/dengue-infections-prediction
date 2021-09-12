@@ -19,9 +19,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def do_train(cfg, model: BasedModel, dataset: BasedDataset, encoder: Encoders, scaler: Scalers, pca: PCA,
              feature_importance=False):
-    # encode target values
-    dataset.df[dataset.target_col] = encoder.custom_encoding(dataset.df, col=cfg.DATASET.TARGET,
-                                                             encode_type=cfg.ENCODER.Y)
+
 
     if cfg.BASIC.TRANSFORMATION:
         dataset.df = dataset.transformation(copy.deepcopy(dataset.df))
@@ -71,6 +69,9 @@ def do_train(cfg, model: BasedModel, dataset: BasedDataset, encoder: Encoders, s
 
     # # plot trees, it will work just for Decision Tree classifier
     # model.plot_tree(X=X_train, y=y_train, target_name='y', feature_names=X_train.columns, class_names=class_names)
+
+    #save model
+    model.save()
 
 
 def do_cross_val(cfg, model: BasedModel, dataset: BasedDataset, encoder: Encoders, scaler: Scalers, pca: PCA):

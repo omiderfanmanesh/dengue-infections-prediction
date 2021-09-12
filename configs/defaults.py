@@ -19,11 +19,13 @@ _C = CN()
 _C.BASIC = CN()
 _C.BASIC.SEED = 2021
 _C.BASIC.PCA = False  # pca = True will apply principal component analysis to data
-_C.BASIC.TRANSFORMATION = True
+_C.BASIC.TRANSFORMATION = False
 _C.BASIC.RAND_STATE = 2021
-_C.BASIC.MODEL = Model.SVM  # select training model e.g. SVM, RandomForest, ...
-_C.BASIC.RUNTIME_MODE = RuntimeMode.CROSS_VAL  # runtime modes {Train, cross validation, hyperparameter tuning}
-_C.BASIC.TASK_MODE = TaskMode.CLASSIFICATION  # task mode = {classification, regression}
+_C.BASIC.OUTPUT = '../output/'
+_C.BASIC.SAVE_MODEL = '../output/model.joblib'
+_C.BASIC.MODEL = Model.RANDOM_FOREST  # select training model e.g. SVM, RandomForest, ...
+_C.BASIC.RUNTIME_MODE = RuntimeMode.TRAIN  # runtime modes {Train, cross validation, hyperparameter tuning}
+_C.BASIC.TASK_MODE = TaskMode.REGRESSION  # task mode = {classification, regression}
 # data resampling, {None,SMOTE,RANDOM_UNDER_SAMPLING} and {None} means don't use
 # resampling, order is important e.g. (Sampling.SMOTE, Sampling.RANDOM_UNDER_SAMPLING),
 _C.BASIC.SAMPLING_STRATEGY = None
@@ -41,43 +43,71 @@ _C.MODEL.SHUFFLE = True  # shuffle the data for cross-validation task
 # Dataset
 # -----------------------------------------------------------------------------
 _C.DATASET = CN()
-_C.DATASET.DATASET_ADDRESS = '../data/dataset/bank.csv'  # the address of dataset file
-_C.DATASET.DATASET_BRIEF_DESCRIPTION = '../data/dataset/description.txt'  # if you have a brief description for your dataset
-_C.DATASET.TARGET = 'y'  # target column of your dataset
-_C.DATASET.HAS_CATEGORICAL_TARGETS = True  # True = if you have a categorical targets otherwise False
+_C.DATASET.DATASET_ADDRESS = '../data/dataset/development.tsv'  # the address of dataset file
+_C.DATASET.EVALUATION_DATASET_ADDRESS = '../data/dataset/evaluation.tsv'  # the address of dataset file
+_C.DATASET.DATASET_BRIEF_DESCRIPTION = None  # if you have a brief description for your dataset
+_C.DATASET.TARGET = 'total_cases'  # target column of your dataset
+_C.DATASET.HAS_CATEGORICAL_TARGETS = False  # True = if you have a categorical targets otherwise False
 
 """
-('age','job','marital','education','default','balance',
-'housing','loan','contact','day','month','duration','campaign','pdays','previous','poutcome')
+('year', 'weekofyear', 'week_start_date', 'PERSIANN_precip_mm',
+       'NCEP_air_temp_k', 'NCEP_avg_temp_k', 'NCEP_dew_point_temp_k',
+       'NCEP_max_air_temp_k', 'NCEP_min_air_temp_k', 'NCEP_precip_kg_per_m2',
+       'NCEP_humidity_percent', 'NCEP_precip_mm', 'NCEP_humidity_g_per_kg',
+       'NCEP_diur_temp_rng_k', 'avg_temp_c', 'diur_temp_rng_c', 'max_temp_c',
+       'min_temp_c', 'precip_mm', 'total_cases', 'city')
 """
 
 # columns that you need to drop from dataframe
 _C.DATASET.DROP_COLS = (
 
-    # 'duration',
-    'day',
-    'balance',
-    'month',
-    'job',
-    'previous',
-    'campaign',
-    'education',
-    # 'poutcome',
-    # 'age',
-    'pdays',
-    'marital',
-    'contact',
-    'housing',
-    'loan',
-    # 'default'
-
+     # 'year',
+     # 'weekofyear',
+     'week_start_date',
+     'PERSIANN_precip_mm',
+     'NCEP_air_temp_k',
+     'NCEP_avg_temp_k',
+     'NCEP_dew_point_temp_k',
+     'NCEP_max_air_temp_k',
+     'NCEP_min_air_temp_k',
+     'NCEP_precip_kg_per_m2',
+     'NCEP_humidity_percent',
+     'NCEP_precip_mm',
+     'NCEP_humidity_g_per_kg',
+     'NCEP_diur_temp_rng_k',
+     'avg_temp_c',
+     'diur_temp_rng_c',
+     'max_temp_c',
+     'min_temp_c',
+     'precip_mm',
+     # 'total_cases',
+     # 'city',
+     # 'month',
+     'PERSIANN_precip_mm_no_nans',
+     'NCEP_avg_temp_c',
+     'NCEP_avg_temp_c_no_nans',
+     'NCEP_diur_temp_rng_c',
+     'NCEP_diur_temp_rng_c_no_nans',
+     'NCEP_max_air_temp_c',
+     'NCEP_max_air_temp_c_no_nans',
+     'NCEP_min_air_temp_c',
+     'NCEP_min_air_temp_c_no_nans',
+     'NCEP_air_temp_c',
+     'NCEP_air_temp_c_no_nans',
+     'NCEP_dew_point_temp_c',
+     'NCEP_dew_point_temp_c_no_nans',
+     'avg_temp_c_no_nans',
+     'diur_temp_rng_c_no_nans',
+     'max_temp_c_no_nans',
+     'min_temp_c_no_nans',
+     'precip_mm_no_nans'
 )
 # ----------------------------------------------------------------------------
 # metric
 # ----------------------------------------------------------------------------
 _C.EVALUATION = CN()
 
-_C.EVALUATION.METRIC = MetricTypes.F1_SCORE_MICRO  # select your metric for your model
+_C.EVALUATION.METRIC = MetricTypes.MEAN_ABSOLUTE_ERROR  # select your metric for your model
 _C.EVALUATION.CONFUSION_MATRIX = False  # set True if you need to plot the confusion matrix
 
 """
@@ -97,16 +127,7 @@ Supported metrics:
 # -----------------------------------------------------------------------------
 # if you have categorical column, write its name in CAPITAL letter
 _C.ENCODER = CN()
-_C.ENCODER.JOB = EncoderTypes.BINARY
-_C.ENCODER.MARITAL = EncoderTypes.BINARY
-_C.ENCODER.EDUCATION = EncoderTypes.ORDINAL
-_C.ENCODER.DEFAULT = EncoderTypes.BINARY
-_C.ENCODER.HOUSING = EncoderTypes.BINARY
-_C.ENCODER.LOAN = EncoderTypes.BINARY
-_C.ENCODER.CONTACT = EncoderTypes.BINARY
-_C.ENCODER.MONTH = EncoderTypes.ORDINAL
-_C.ENCODER.POUTCOME = EncoderTypes.BINARY
-_C.ENCODER.Y = EncoderTypes.LABEL  # if your target is categorical
+_C.ENCODER.CITY = EncoderTypes.BINARY
 # -----------------------------------------------------------------------------
 # SCALER
 # -----------------------------------------------------------------------------
@@ -117,14 +138,13 @@ _C.SCALER = ScaleTypes.STANDARD  # select the type of scaler (STANDARD SCALER, M
 # TRANSFORMATION
 # -----------------------------------------------------------------------------
 _C.TRANSFORMATION = CN()
-_C.TRANSFORMATION.AGE = TransformersType.BOX_COX  #
-_C.TRANSFORMATION.BALANCE = TransformersType.BOX_COX  #
-_C.TRANSFORMATION.DAY = TransformersType.NONE  #
-_C.TRANSFORMATION.DURATION = TransformersType.BOX_COX  #
-_C.TRANSFORMATION.CAMPAIGN = TransformersType.BOX_COX  #
-_C.TRANSFORMATION.PDAYS = TransformersType.LOG  #
-_C.TRANSFORMATION.PREVIOUS = TransformersType.BOX_COX  #
-
+_C.TRANSFORMATION.PERSIANN_PRECIP_MM_NO_NANS = TransformersType.LOG
+_C.TRANSFORMATION.NCEP_AVG_TEMP_C_NO_NANS = TransformersType.LOG
+_C.TRANSFORMATION.NCEP_DIUR_TEMP_RNG_C_NO_NANS = TransformersType.LOG
+_C.TRANSFORMATION.NCEP_MAX_AIR_TEMP_C_NO_NANS = TransformersType.LOG
+_C.TRANSFORMATION.NCEP_MIN_AIR_TEMP_C_NO_NANS = TransformersType.LOG
+_C.TRANSFORMATION.NCEP_AIR_TEMP_C_NO_NANS = TransformersType.LOG
+_C.TRANSFORMATION.NCEP_DEW_POINT_TEMP_C_NO_NANS = TransformersType.LOG
 # -----------------------------------------------------------------------------
 # DECOMPOSITION
 # -----------------------------------------------------------------------------
@@ -234,7 +254,7 @@ _C.RANDOM_FOREST = CN()
 _C.RANDOM_FOREST.NAME = 'RANDOM_FOREST'
 
 _C.RANDOM_FOREST.N_ESTIMATORS = 1000  # int, default=100
-_C.RANDOM_FOREST.CRITERION = "gini"  # {"gini", "entropy"}, default="gini"
+_C.RANDOM_FOREST.CRITERION = "mse"  # classification:{"gini", "entropy"}, default="gini" | regression:{"mse", "mae"}, default="mse"
 _C.RANDOM_FOREST.MAX_DEPTH = 10  # int, default=None
 _C.RANDOM_FOREST.MIN_SAMPLES_SPLIT = 5  # int or float, default=2
 _C.RANDOM_FOREST.MIN_SAMPLES_LEAF = 2  # int or float, default=1

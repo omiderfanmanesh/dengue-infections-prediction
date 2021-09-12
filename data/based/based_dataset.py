@@ -26,13 +26,18 @@ pd.set_option('display.max_colwidth', None)
 
 class BasedDataset:
 
-    def __init__(self, cfg, dataset_type):
+    def __init__(self, cfg, dataset_type, development=True):
 
         self._cfg = cfg
         self.dataset_type = dataset_type
-        self.dataset_address = cfg.DATASET.DATASET_ADDRESS
-        self.target_col = cfg.DATASET.TARGET
-        self.dataset_description_file = cfg.DATASET.DATASET_BRIEF_DESCRIPTION
+        if development:
+            self.dataset_address = cfg.DATASET.DATASET_ADDRESS
+            self.target_col = cfg.DATASET.TARGET
+            self.dataset_description_file = cfg.DATASET.DATASET_BRIEF_DESCRIPTION
+        else:
+            self.dataset_address = cfg.DATASET.EVALUATION_DATASET_ADDRESS
+            self.target_col = None
+            self.dataset_description_file = None
 
         if self.dataset_description_file is not None:
             self.about = self.__open_txt_file(self.dataset_description_file)
@@ -48,7 +53,9 @@ class BasedDataset:
         load dataset from csv file to dataframe
         """
         if self.dataset_type == FileTypes.CSV:
-            self.df_main = self.__create_csv_dataframe()
+            self.df_main = self.__create_csv_dataframe(delimiter=";")
+        elif self.dataset_type == FileTypes.TSV:
+            self.df_main = self.__create_tsv_dataframe()
         else:
             raise ValueError('dataset should be CSV file')
 
@@ -283,12 +290,19 @@ class BasedDataset:
 
         return steps
 
-    def __create_csv_dataframe(self):
+    def __create_csv_dataframe(self, delimiter=","):
         """
         read data from csv file
         :return: pandas dataframe
         """
-        return pd.read_csv(self.dataset_address, delimiter=';')
+        return pd.read_csv(self.dataset_address, delimiter=delimiter)
+
+    def __create_tsv_dataframe(self):
+        """
+        read data from tsv file
+        :return: pandas dataframe
+        """
+        return pd.read_table(self.dataset_address)
 
     def __open_txt_file(self, desc):
         """

@@ -2,7 +2,7 @@
 
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, MaxAbsScaler, RobustScaler, StandardScaler
-
+import joblib
 from data.based.scale_types import ScaleTypes
 
 
@@ -62,10 +62,20 @@ class Scalers:
         """
         scl_type = self._cfg.SCALER
         scl, scl_name = self.__get_scaler(scale_type=scl_type)
+
+
+
         if data is None:
-            return self.__apply(scl=scl, X_train=X_train, X_test=X_test)
+            scl,train_scale, test_scale =self.__apply(scl=scl, X_train=X_train, X_test=X_test)
+            # save scaler obj
+            joblib.dump(scl, filename=f"{self._cfg.BASIC.OUTPUT}{scl_name}_{scl_type}.joblib")
+
+            return train_scale, test_scale
         else:
-            return self.__apply(scl=scl, data=data)
+            scl, train_scale = self.__apply(scl=scl, data=data)
+            # save scaler obj
+            joblib.dump(scl, filename=f"{self._cfg.BASIC.OUTPUT}{scl_name}_{scl_type}.joblib")
+            return train_scale
 
     def __apply(self, scl, data=None, X_train=None, X_test=None):
         """
@@ -82,8 +92,11 @@ class Scalers:
             test_scale = None
             if X_test is not None:
                 test_scale = scl.transform(X_test)
-            return train_scale, test_scale
+            return scl,train_scale, test_scale
         else:
             scl.fit(data)
             train_scale = scl.transform(data)
-            return train_scale
+            return scl,train_scale
+
+    def scale_by_scl(self,scl,data):
+        return scl.transform(data)
