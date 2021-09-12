@@ -25,10 +25,7 @@ def main():
     encoder = Encoders(cdg=cfg)  # initialize Encoder object
     scaler = Scalers(cfg=cfg)  # initialize scaler object
 
-    pca = None
-    if cfg.BASIC.PCA:  # PCA object will be initialized if you set pca = True in configs file
-        pca = PCA(cfg=cfg)
-        pca.pca = joblib.load('../output/pca.joblib')
+
 
     if cfg.BASIC.TRANSFORMATION:
         den.df = den.transformation(copy.deepcopy(den.df))
@@ -36,10 +33,16 @@ def main():
     enc = joblib.load('../output/city_binary_encoding_4.joblib')  # initialize Encoder object
     scl = joblib.load('../output/min_max_scaler_1.joblib')  # initialize scaler object
 
-    den.df = encoder.encode_by_enc(enc=enc, data=den.df)
+    # den.df = encoder.encode_by_enc(enc=enc, data=den.df)
     den.df = scaler.scale_by_scl(scl=scl, data=den.df)
 
-    den.df = pca.pca.transform(den.df)
+    pca = None
+    if cfg.BASIC.PCA:  # PCA object will be initialized if you set pca = True in configs file
+        pca = PCA(cfg=cfg)
+        pca.pca = joblib.load('../output/pca.joblib')
+        den.df = pca.pca.transform(den.df)
+
+    # model.model.get_booster().feature_names =None
 
     pred = model.prediction(den.df)
     WriteOnFile('../output/submission.csv',pred)

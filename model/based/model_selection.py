@@ -6,3 +6,5 @@ class Model:
     DECISION_TREE = 2
     LOGISTIC_REGRESSION = 3
     KNN = 4
+    MLP = 5
+    XGBOOST = 6

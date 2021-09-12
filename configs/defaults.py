@@ -18,7 +18,7 @@ _C = CN()
 # -----------------------------------------------------------------------------
 _C.BASIC = CN()
 _C.BASIC.SEED = 2021
-_C.BASIC.PCA = True  # pca = True will apply principal component analysis to data
+_C.BASIC.PCA = False  # pca = True will apply principal component analysis to data
 _C.BASIC.TRANSFORMATION = False
 _C.BASIC.RAND_STATE = 2021
 _C.BASIC.OUTPUT = '../output/'
@@ -81,7 +81,8 @@ _C.DATASET.DROP_COLS = (
     'min_temp_c',
     'precip_mm',
     # 'total_cases',
-    # 'city',
+    'city',
+    # 'season',
     'month',
     'PERSIANN_precip_mm_no_nans',
     'NCEP_avg_temp_c',
@@ -415,3 +416,117 @@ _C.KNNR.HYPER_PARAM_TUNING.P = None
 _C.KNNR.HYPER_PARAM_TUNING.METRIC = None
 _C.KNNR.HYPER_PARAM_TUNING.METRIC_PARAMS = None
 _C.KNNR.HYPER_PARAM_TUNING.N_JOBS = None
+
+# ----------------------------------------------------------------------------
+_C.MLP = CN()
+_C.MLP.NAME = 'MLP'
+_C.MLP.HIDDEN_LAYER_SIZES = (100,)  # hidden_layer_sizes: tuple, length = n_layers - 2, default=(100,)
+_C.MLP.ACTIVATION = 'relu'  # activation : {'identity', 'logistic', 'tanh', 'relu'}, default='relu'
+_C.MLP.SOLVER = 'sgd'  # solver : {'lbfgs', 'sgd', 'adam'}, default='adam'
+_C.MLP.ALPHA = 0.0001  # alpha : float, default=0.0001
+_C.MLP.BATCH_SIZE = 'auto'  # batch_size : int, default='auto'
+_C.MLP.LEARNING_RATE = 'constant'  # learning_rate : {'constant', 'invscaling', 'adaptive'}, default='constant'
+_C.MLP.LEARNING_RATE_INIT = 0.001  # learning_rate_init : double, default=0.001
+_C.MLP.POWER_T = 0.5  # power_t : double, default=0.5
+_C.MLP.MAX_ITER = 2000  # max_iter : int, default=200
+_C.MLP.SHUFFLE = True  # shuffle : bool, default=True
+_C.MLP.RANDOM_STATE = _C.BASIC.RAND_STATE  # random_state : int, RandomState instance, default=None
+_C.MLP.TOL = 1e-4  # tol : float, default=1e-4
+_C.MLP.VERBOSE = True  # verbose : bool, default=False
+_C.MLP.WARM_START = False  # warm_start : bool, default=False
+_C.MLP.MOMENTUM = 0.9  # momentum : float, default=0.9
+_C.MLP.NESTEROVS_MOMENTUM = True  # nesterovs_momentum : boolean, default=True
+_C.MLP.EARLY_STOPPING = False  # early_stopping : bool, default=False
+_C.MLP.VALIDATION_FRACTION = 0.1  # validation_fraction : float, default=0.1
+_C.MLP.BETA_1 = 0.9  # beta_1 : float, default=0.9
+_C.MLP.BETA_2 = 0.999  # beta_2 : float, default=0.999
+_C.MLP.EPSILON = 1e-8  # epsilon : float, default=1e-8
+_C.MLP.N_ITER_NO_CHANGE = 10  # n_iter_no_change : int, default=10
+_C.MLP.MAX_FUN = 15000  # max_fun : int, default=15000
+
+_C.MLP.HYPER_PARAM_TUNING = CN()
+_C.MLP.HYPER_PARAM_TUNING.NAME = None
+_C.MLP.HYPER_PARAM_TUNING.HIDDEN_LAYER_SIZES = None
+_C.MLP.HYPER_PARAM_TUNING.ACTIVATION = None
+_C.MLP.HYPER_PARAM_TUNING.SOLVER = None
+_C.MLP.HYPER_PARAM_TUNING.ALPHA = None
+_C.MLP.HYPER_PARAM_TUNING.BATCH_SIZE = None
+_C.MLP.HYPER_PARAM_TUNING.LEARNING_RATE = None
+_C.MLP.HYPER_PARAM_TUNING.LEARNING_RATE_INIT = None
+_C.MLP.HYPER_PARAM_TUNING.POWER_T = None
+_C.MLP.HYPER_PARAM_TUNING.MAX_ITER = None
+_C.MLP.HYPER_PARAM_TUNING.SHUFFLE = None
+_C.MLP.HYPER_PARAM_TUNING.RANDOM_STATE = None
+_C.MLP.HYPER_PARAM_TUNING.TOL = None
+_C.MLP.HYPER_PARAM_TUNING.VERBOSE = None
+_C.MLP.HYPER_PARAM_TUNING.WARM_START = None
+_C.MLP.HYPER_PARAM_TUNING.MOMENTUM = None
+_C.MLP.HYPER_PARAM_TUNING.NESTEROVS_MOMENTUM = None
+_C.MLP.HYPER_PARAM_TUNING.EARLY_STOPPING = None
+_C.MLP.HYPER_PARAM_TUNING.VALIDATION_FRACTION = None
+_C.MLP.HYPER_PARAM_TUNING.BETA_1 = None
+_C.MLP.HYPER_PARAM_TUNING.BETA_2 = None
+_C.MLP.HYPER_PARAM_TUNING.EPSILON = None
+_C.MLP.HYPER_PARAM_TUNING.N_ITER_NO_CHANGE = None
+_C.MLP.HYPER_PARAM_TUNING.MAX_FUN = None
+
+# ----------------------------------------------------------------------------
+_C.XGBOOST = CN()
+_C.XGBOOST.NAME = 'xgboost'
+_C.XGBOOST.N_ESTIMATORS = 100  # Number of gradient boosted trees. Equivalent to number of boosting rounds.
+_C.XGBOOST.MAX_DEPTH = 50  # max_depth : Maximum tree depth for base learners.
+_C.XGBOOST.LEARNING_RATE = 0.07  # learning_rate : Boosting learning rate (xgb’s “eta”)
+_C.XGBOOST.VERBOSITY = 1  # verbosity : The degree of verbosity. Valid values are 0 (silent) - 3 (debug).
+_C.XGBOOST.OBJECTIVE = None  # objective : Specify the learning task and the corresponding learning objective or a custom objective function to be used (see note below).
+_C.XGBOOST.BOOSTER = None  # booster: Specify which booster to use: gbtree, gblinear or dart.
+_C.XGBOOST.TREE_METHOD = None  # tree_method:  Specify which tree method to use.  Default to auto.  If this parameter is set to default, XGBoost will choose the most conservative option available.  It's recommended to study this option from parameters document.
+_C.XGBOOST.N_JOBS = -1  # n_jobs : Number of parallel threads used to run xgboost.
+_C.XGBOOST.GAMMA = None  # gamma : Minimum loss reduction required to make a further partition on a leaf node of the tree.
+_C.XGBOOST.MIN_CHILD_WEIGHT = None  # min_child_weight : Minimum sum of instance weight(hessian) needed in a child.
+_C.XGBOOST.MAX_DELTA_STEP = None  # max_delta_step : Maximum delta step we allow each tree's weight estimation to be.
+_C.XGBOOST.SUBSAMPLE = None  # subsample : Subsample ratio of the training instance.
+_C.XGBOOST.COLSAMPLE_BYTREE = None  # colsample_bytree : Subsample ratio of columns when constructing each tree.
+_C.XGBOOST.COLSAMPLE_BYLEVEL = None  # colsample_bylevel : Subsample ratio of columns for each level.
+_C.XGBOOST.COLSAMPLE_BYNODE = None  # colsample_bynode :   Subsample ratio of columns for each split.
+_C.XGBOOST.REG_ALPHA = None  # reg_alpha : L1 regularization term on weights
+_C.XGBOOST.REG_LAMBDA = 0.9  # reg_lambda : L2 regularization term on weights
+_C.XGBOOST.SCALE_POS_WEIGHT = None  # scale_pos_weight : Balancing of positive and negative weights.
+_C.XGBOOST.BASE_SCORE = None  # base_score: The initial prediction score of all instances, global bias.
+_C.XGBOOST.RANDOM_STATE = _C.BASIC.RAND_STATE  # random_state : Random number seed.
+_C.XGBOOST.MISSING = None  #  missing : Value in the data which needs to be present as a missing value.  float, default np.nan
+_C.XGBOOST.NUM_PARALLEL_TREE = None  # num_parallel_tree: Used for boosting random forest.
+_C.XGBOOST.MONOTONE_CONSTRAINTS = None  # monotone_constraints : Constraint of variable monotonicity.
+_C.XGBOOST.INTERACTION_CONSTRAINTS = None  # interaction_constraints :  Constraints for interaction representing permitted interactions.
+_C.XGBOOST.IMPORTANCE_TYPE = "gain"  # importance_type:  The feature importance type for the feature_importances either "gain", "weight", "cover", "total_gain" or "total_cover".
+_C.XGBOOST.GPU_ID = None  #
+_C.XGBOOST.VALIDATE_PARAMETERS = None  #
+
+
+
+_C.XGBOOST.HYPER_PARAM_TUNING = CN()
+_C.XGBOOST.HYPER_PARAM_TUNING.N_ESTIMATORS = None
+_C.XGBOOST.HYPER_PARAM_TUNING.MAX_DEPTH = None
+_C.XGBOOST.HYPER_PARAM_TUNING.LEARNING_RATE = None
+_C.XGBOOST.HYPER_PARAM_TUNING.VERBOSITY = None
+_C.XGBOOST.HYPER_PARAM_TUNING.OBJECTIVE = None
+_C.XGBOOST.HYPER_PARAM_TUNING.BOOSTER = None
+_C.XGBOOST.HYPER_PARAM_TUNING.TREE_METHOD = None
+_C.XGBOOST.HYPER_PARAM_TUNING.N_JOBS = None
+_C.XGBOOST.HYPER_PARAM_TUNING.GAMMA = None
+_C.XGBOOST.HYPER_PARAM_TUNING.MIN_CHILD_WEIGHT = None
+_C.XGBOOST.HYPER_PARAM_TUNING.MAX_DELTA_STEP = None
+_C.XGBOOST.HYPER_PARAM_TUNING.SUBSAMPLE = None
+_C.XGBOOST.HYPER_PARAM_TUNING.COLSAMPLE_BYTREE = None
+_C.XGBOOST.HYPER_PARAM_TUNING.COLSAMPLE_BYLEVEL = None
+_C.XGBOOST.HYPER_PARAM_TUNING.COLSAMPLE_BYNODE = None
+_C.XGBOOST.HYPER_PARAM_TUNING.REG_ALPHA = None
+_C.XGBOOST.HYPER_PARAM_TUNING.REG_LAMBDA = None
+_C.XGBOOST.HYPER_PARAM_TUNING.SCALE_POS_WEIGHT = None
+_C.XGBOOST.HYPER_PARAM_TUNING.BASE_SCORE = None
+_C.XGBOOST.HYPER_PARAM_TUNING.MISSING = None
+_C.XGBOOST.HYPER_PARAM_TUNING.NUM_PARALLEL_TREE = None
+_C.XGBOOST.HYPER_PARAM_TUNING.MONOTONE_CONSTRAINTS = None
+_C.XGBOOST.HYPER_PARAM_TUNING.INTERACTION_CONSTRAINTS = None
+_C.XGBOOST.HYPER_PARAM_TUNING.IMPORTANCE_TYPE = None
+_C.XGBOOST.HYPER_PARAM_TUNING.GPU_ID = None
+_C.XGBOOST.HYPER_PARAM_TUNING.VALIDATE_PARAMETERS = None

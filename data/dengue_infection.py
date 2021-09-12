@@ -11,10 +11,14 @@ from data.based.file_types import FileTypes
 
 
 class DengueInfection(BasedDataset):
-    def __init__(self, cfg,development):
+    def __init__(self, cfg, development):
         super(DengueInfection, self).__init__(cfg=cfg, dataset_type=FileTypes.TSV, development=development)
 
+
+        self.city()
+
         self.extract_month()
+        self.week_start_date()
 
         self.persiann_precip_mm()
 
@@ -31,6 +35,7 @@ class DengueInfection(BasedDataset):
         self.min_temp_c()
         self.precip_mm()
 
+
     def fill_nan(self, col):
         table = pd.pivot_table(self.df, values=col, index=['year', 'month'],
                                columns=['city'], aggfunc=np.mean)
@@ -42,7 +47,8 @@ class DengueInfection(BasedDataset):
                 query = table.query(f'year == "{row["year"]}" & month =="{row["month"]}"').reset_index()
                 city = row['city']
                 value = query[city]
-                if math.isnan(value):
+
+                if value.empty:
                     value = self.df.loc[self.df['year'] == row["year"]][col].mean()
                     self.df.loc[index, [col + '_no_nans']] = value
                     continue
@@ -56,6 +62,8 @@ class DengueInfection(BasedDataset):
         if kelvin is None:
             return kelvin
         return kelvin - 273.15
+
+
 
     def year(self):
         pass
@@ -132,4 +140,4 @@ class DengueInfection(BasedDataset):
         pass
 
     def city(self):
-        pass
+        self.df = self.df[self.df['city'] != 'sj']

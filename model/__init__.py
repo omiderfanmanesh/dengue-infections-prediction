@@ -5,3 +5,5 @@ from model.logistic_regression import LogisticRegression
 from model.random_forest import RandomForest
 from model.svm import SVM
 from model.knn import KNN
+from model.mlp import MLP
+from model.xgboost import XGBOOST
