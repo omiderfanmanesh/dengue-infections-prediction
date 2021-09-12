@@ -18,7 +18,7 @@ _C = CN()
 # -----------------------------------------------------------------------------
 _C.BASIC = CN()
 _C.BASIC.SEED = 2021
-_C.BASIC.PCA = False  # pca = True will apply principal component analysis to data
+_C.BASIC.PCA = True  # pca = True will apply principal component analysis to data
 _C.BASIC.TRANSFORMATION = False
 _C.BASIC.RAND_STATE = 2021
 _C.BASIC.OUTPUT = '../output/'
@@ -149,7 +149,7 @@ _C.TRANSFORMATION.NCEP_DEW_POINT_TEMP_C_NO_NANS = TransformersType.LOG
 # DECOMPOSITION
 # -----------------------------------------------------------------------------
 _C.PCA = CN()
-_C.PCA.N_COMPONENTS = 5  # number of components
+_C.PCA.N_COMPONENTS = 0.9  # number of components
 _C.PCA.PLOT = False  # set True if you want to plot pca components
 
 # ---------------------------------------------------------------------------- #

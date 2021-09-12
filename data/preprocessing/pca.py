@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from sklearn.decomposition import PCA as skl_pca
-
+import joblib
 sns.set()
 
 
@@ -54,6 +54,9 @@ class PCA:
 
             df_train = pd.DataFrame(data=n_train, columns=_columns)
             df_test = pd.DataFrame(data=n_test, columns=_columns)
+
+            # save pca
+            joblib.dump(self.pca,'../output/pca.joblib')
 
             return df_train, df_test
 

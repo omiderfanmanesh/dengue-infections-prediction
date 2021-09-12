@@ -28,6 +28,7 @@ def main():
     pca = None
     if cfg.BASIC.PCA:  # PCA object will be initialized if you set pca = True in configs file
         pca = PCA(cfg=cfg)
+        pca.pca = joblib.load('../output/pca.joblib')
 
     if cfg.BASIC.TRANSFORMATION:
         den.df = den.transformation(copy.deepcopy(den.df))
@@ -37,6 +38,8 @@ def main():
 
     den.df = encoder.encode_by_enc(enc=enc, data=den.df)
     den.df = scaler.scale_by_scl(scl=scl, data=den.df)
+
+    den.df = pca.pca.transform(den.df)
 
     pred = model.prediction(den.df)
     WriteOnFile('../output/submission.csv',pred)
