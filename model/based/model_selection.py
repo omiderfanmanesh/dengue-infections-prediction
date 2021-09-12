@@ -5,3 +5,4 @@ class Model:
     RANDOM_FOREST = 1
     DECISION_TREE = 2
     LOGISTIC_REGRESSION = 3
+    KNN = 4

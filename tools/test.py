@@ -39,7 +39,7 @@ def main():
     den.df = scaler.scale_by_scl(scl=scl, data=den.df)
 
     pred = model.prediction(den.df)
-    WriteOnFile('submission.csv',pred)
+    WriteOnFile('../output/submission.csv',pred)
 
 if __name__ == '__main__':
     main()

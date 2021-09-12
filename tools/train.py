@@ -4,7 +4,7 @@ from configs import cfg
 from data.loader import load
 from data.preprocessing import Encoders, Scalers, PCA
 from engine.trainer import do_fine_tune, do_cross_val, do_train
-from model import DecisionTree, LogisticRegression, SVM, RandomForest
+from model import DecisionTree, LogisticRegression, SVM, RandomForest,KNN
 from model.based import Model
 from model.based.tuning_mode import TuningMode
 from utils import RuntimeMode
@@ -24,6 +24,8 @@ def main():
         model = RandomForest(cfg=cfg)
     elif model_selection == Model.LOGISTIC_REGRESSION:
         model = LogisticRegression(cfg=cfg)
+    elif model_selection == Model.KNN:
+        model = KNN(cfg=cfg)
 
     encoder = Encoders(cdg=cfg)  # initialize Encoder object
     scaler = Scalers(cfg=cfg)  # initialize scaler object

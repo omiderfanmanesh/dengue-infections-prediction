@@ -23,7 +23,7 @@ _C.BASIC.TRANSFORMATION = False
 _C.BASIC.RAND_STATE = 2021
 _C.BASIC.OUTPUT = '../output/'
 _C.BASIC.SAVE_MODEL = '../output/model.joblib'
-_C.BASIC.MODEL = Model.RANDOM_FOREST  # select training model e.g. SVM, RandomForest, ...
+_C.BASIC.MODEL = Model.KNN  # select training model e.g. SVM, RandomForest, ...
 _C.BASIC.RUNTIME_MODE = RuntimeMode.TRAIN  # runtime modes {Train, cross validation, hyperparameter tuning}
 _C.BASIC.TASK_MODE = TaskMode.REGRESSION  # task mode = {classification, regression}
 # data resampling, {None,SMOTE,RANDOM_UNDER_SAMPLING} and {None} means don't use
@@ -61,46 +61,46 @@ _C.DATASET.HAS_CATEGORICAL_TARGETS = False  # True = if you have a categorical t
 # columns that you need to drop from dataframe
 _C.DATASET.DROP_COLS = (
 
-     # 'year',
-     # 'weekofyear',
-     'week_start_date',
-     'PERSIANN_precip_mm',
-     'NCEP_air_temp_k',
-     'NCEP_avg_temp_k',
-     'NCEP_dew_point_temp_k',
-     'NCEP_max_air_temp_k',
-     'NCEP_min_air_temp_k',
-     'NCEP_precip_kg_per_m2',
-     'NCEP_humidity_percent',
-     'NCEP_precip_mm',
-     'NCEP_humidity_g_per_kg',
-     'NCEP_diur_temp_rng_k',
-     'avg_temp_c',
-     'diur_temp_rng_c',
-     'max_temp_c',
-     'min_temp_c',
-     'precip_mm',
-     # 'total_cases',
-     # 'city',
-     # 'month',
-     'PERSIANN_precip_mm_no_nans',
-     'NCEP_avg_temp_c',
-     'NCEP_avg_temp_c_no_nans',
-     'NCEP_diur_temp_rng_c',
-     'NCEP_diur_temp_rng_c_no_nans',
-     'NCEP_max_air_temp_c',
-     'NCEP_max_air_temp_c_no_nans',
-     'NCEP_min_air_temp_c',
-     'NCEP_min_air_temp_c_no_nans',
-     'NCEP_air_temp_c',
-     'NCEP_air_temp_c_no_nans',
-     'NCEP_dew_point_temp_c',
-     'NCEP_dew_point_temp_c_no_nans',
-     'avg_temp_c_no_nans',
-     'diur_temp_rng_c_no_nans',
-     'max_temp_c_no_nans',
-     'min_temp_c_no_nans',
-     'precip_mm_no_nans'
+    # 'year',
+    # 'weekofyear',
+    'week_start_date',
+    'PERSIANN_precip_mm',
+    'NCEP_air_temp_k',
+    'NCEP_avg_temp_k',
+    'NCEP_dew_point_temp_k',
+    'NCEP_max_air_temp_k',
+    'NCEP_min_air_temp_k',
+    'NCEP_precip_kg_per_m2',
+    'NCEP_humidity_percent',
+    'NCEP_precip_mm',
+    'NCEP_humidity_g_per_kg',
+    'NCEP_diur_temp_rng_k',
+    'avg_temp_c',
+    'diur_temp_rng_c',
+    'max_temp_c',
+    'min_temp_c',
+    'precip_mm',
+    # 'total_cases',
+    # 'city',
+    # 'month',
+    'PERSIANN_precip_mm_no_nans',
+    'NCEP_avg_temp_c',
+    'NCEP_avg_temp_c_no_nans',
+    'NCEP_diur_temp_rng_c',
+    'NCEP_diur_temp_rng_c_no_nans',
+    'NCEP_max_air_temp_c',
+    'NCEP_max_air_temp_c_no_nans',
+    'NCEP_min_air_temp_c',
+    'NCEP_min_air_temp_c_no_nans',
+    'NCEP_air_temp_c',
+    'NCEP_air_temp_c_no_nans',
+    'NCEP_dew_point_temp_c',
+    'NCEP_dew_point_temp_c_no_nans',
+    'avg_temp_c_no_nans',
+    'diur_temp_rng_c_no_nans',
+    'max_temp_c_no_nans',
+    'min_temp_c_no_nans',
+    'precip_mm_no_nans'
 )
 # ----------------------------------------------------------------------------
 # metric
@@ -249,6 +249,18 @@ _C.SVM.HYPER_PARAM_TUNING.MAX_ITER = None
 _C.SVM.HYPER_PARAM_TUNING.DECISION_FUNCTION_SHAPE = None
 _C.SVM.HYPER_PARAM_TUNING.BREAK_TIES = None
 
+_C.SVR.HYPER_PARAM_TUNING = CN()
+_C.SVR.HYPER_PARAM_TUNING.KERNEL = None
+_C.SVR.HYPER_PARAM_TUNING.DEGREE = None
+_C.SVR.HYPER_PARAM_TUNING.GAMMA = None
+_C.SVR.HYPER_PARAM_TUNING.COEF0 = None
+_C.SVR.HYPER_PARAM_TUNING.TOL = None
+_C.SVR.HYPER_PARAM_TUNING.C = None
+_C.SVR.HYPER_PARAM_TUNING.EPSILON = None
+_C.SVR.HYPER_PARAM_TUNING.SHRINKING = None
+_C.SVR.HYPER_PARAM_TUNING.CACHE_SIZE = None
+_C.SVR.HYPER_PARAM_TUNING.VERBOSE = None
+_C.SVR.HYPER_PARAM_TUNING.MAX_ITER = None
 # ----------------------------------------------------------------------------
 _C.RANDOM_FOREST = CN()
 _C.RANDOM_FOREST.NAME = 'RANDOM_FOREST'
@@ -331,7 +343,7 @@ _C.LOGISTIC_REGRESSION.HYPER_PARAM_TUNING.L1_RATIO = None
 _C.DECISION_TREE = CN()
 _C.DECISION_TREE.NAME = 'DECISION TREE'
 
-_C.DECISION_TREE.CRITERION = "gini"  # criterion : {"gini", "entropy"}, default="gini"
+_C.DECISION_TREE.CRITERION = "mse"  # criterion : {"gini", "entropy"}, default="gini" | {"mse", "friedman_mse", "mae"}, default="mse"
 _C.DECISION_TREE.SPLITTER = "best"  # splitter : {"best", "random"}, default="best"
 _C.DECISION_TREE.MAX_DEPTH = 10  # max_depth : int, default=None
 _C.DECISION_TREE.MIN_SAMPLES_SPLIT = 10  # min_samples_split : int or float, default=2
@@ -362,3 +374,44 @@ _C.DECISION_TREE.HYPER_PARAM_TUNING.CLASS_WEIGHT = None
 _C.DECISION_TREE.HYPER_PARAM_TUNING.PRESORT = None
 _C.DECISION_TREE.HYPER_PARAM_TUNING.CCP_ALPHA = None
 # ----------------------------------------------------------------------------
+_C.KNNC = CN()
+_C.KNNC.NAME = 'KNNClassifier'
+_C.KNNC.N_NEIGHBORS = 5  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
+_C.KNNC.WEIGHTS = 'uniform'  # weights : {'uniform', 'distance'} or callable, default='uniform'
+_C.KNNC.ALGORITHM = 'auto'  # algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
+_C.KNNC.LEAF_SIZE = 30  # leaf_size : int, default=30
+_C.KNNC.P = 2  # p : int, default=2 Power parameter for the Minkowski metric.
+_C.KNNC.METRIC = 'minkowski'  # metric : str or callable, default='minkowski'
+_C.KNNC.METRIC_PARAMS = None  # metric_params : dict, default=None
+_C.KNNC.N_JOBS = -1  # n_jobs : int, default=None
+
+_C.KNNC.HYPER_PARAM_TUNING = CN()
+_C.KNNC.HYPER_PARAM_TUNING.N_NEIGHBORS = None
+_C.KNNC.HYPER_PARAM_TUNING.WEIGHTS = None
+_C.KNNC.HYPER_PARAM_TUNING.ALGORITHM = None
+_C.KNNC.HYPER_PARAM_TUNING.LEAF_SIZE = None
+_C.KNNC.HYPER_PARAM_TUNING.P = None
+_C.KNNC.HYPER_PARAM_TUNING.METRIC = None
+_C.KNNC.HYPER_PARAM_TUNING.METRIC_PARAMS = None
+_C.KNNC.HYPER_PARAM_TUNING.N_JOBS = None
+
+_C.KNNR = CN()
+_C.KNNR.NAME = 'KNNClassifier'
+_C.KNNR.N_NEIGHBORS = 2  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
+_C.KNNR.WEIGHTS = 'distance'  # weights : {'uniform', 'distance'} or callable, default='uniform'
+_C.KNNR.ALGORITHM = 'auto'  # algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
+_C.KNNR.LEAF_SIZE = 30  # leaf_size : int, default=30
+_C.KNNR.P = 2  # p : int, default=2 Power parameter for the Minkowski metric.
+_C.KNNR.METRIC = 'minkowski'  # metric : str or callable, default='minkowski'
+_C.KNNR.METRIC_PARAMS = None  # metric_params : dict, default=None
+_C.KNNR.N_JOBS = -1  # n_jobs : int, default=None
+
+_C.KNNR.HYPER_PARAM_TUNING = CN()
+_C.KNNR.HYPER_PARAM_TUNING.N_NEIGHBORS = None
+_C.KNNR.HYPER_PARAM_TUNING.WEIGHTS = None
+_C.KNNR.HYPER_PARAM_TUNING.ALGORITHM = None
+_C.KNNR.HYPER_PARAM_TUNING.LEAF_SIZE = None
+_C.KNNR.HYPER_PARAM_TUNING.P = None
+_C.KNNR.HYPER_PARAM_TUNING.METRIC = None
+_C.KNNR.HYPER_PARAM_TUNING.METRIC_PARAMS = None
+_C.KNNR.HYPER_PARAM_TUNING.N_JOBS = None
