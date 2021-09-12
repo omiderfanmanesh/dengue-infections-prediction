@@ -14,11 +14,10 @@ class DengueInfection(BasedDataset):
     def __init__(self, cfg, development):
         super(DengueInfection, self).__init__(cfg=cfg, dataset_type=FileTypes.TSV, development=development)
 
-
-        self.city()
-
         self.extract_month()
+        self.extract_quarter()
         self.week_start_date()
+        self.six_month()
 
         self.persiann_precip_mm()
 
@@ -34,7 +33,6 @@ class DengueInfection(BasedDataset):
         self.max_temp_c()
         self.min_temp_c()
         self.precip_mm()
-
 
     def fill_nan(self, col):
         table = pd.pivot_table(self.df, values=col, index=['year', 'month'],
@@ -58,12 +56,27 @@ class DengueInfection(BasedDataset):
         self.df['week_start_date'] = pd.to_datetime(self.df['week_start_date'])
         self.df['month'] = self.df['week_start_date'].dt.month
 
+    def extract_quarter(self):
+        self.df['quarter'] = self.df['week_start_date'].dt.quarter
+
+    def season_of_date(date):
+        year = str(date.year)
+        seasons = {'spring': pd.date_range(start='21/03/' + year, end='20/06/' + year),
+                   'summer': pd.date_range(start='21/06/' + year, end='22/09/' + year),
+                   'autumn': pd.date_range(start='23/09/' + year, end='20/12/' + year)}
+        if date in seasons['spring']:
+            return 'spring'
+        if date in seasons['summer']:
+            return 'summer'
+        if date in seasons['autumn']:
+            return 'autumn'
+        else:
+            return 'winter'
+
     def kelvin_to_celsius(self, kelvin):
         if kelvin is None:
             return kelvin
         return kelvin - 273.15
-
-
 
     def year(self):
         pass
@@ -73,6 +86,9 @@ class DengueInfection(BasedDataset):
 
     def week_start_date(self):
         pass
+
+    def six_month(self):
+        self.df['six'] = self.df['month'].apply(lambda x: 1 if x > 6 else 0)
 
     def persiann_precip_mm(self):
         self.fill_nan(col='PERSIANN_precip_mm')
@@ -140,4 +156,5 @@ class DengueInfection(BasedDataset):
         pass
 
     def city(self):
-        self.df = self.df[self.df['city'] != 'sj']
+        # self.df = self.df[self.df['city'] != 'sj']
+        pass

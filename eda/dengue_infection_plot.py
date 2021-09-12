@@ -15,6 +15,12 @@ class DengueInfectionPlots(BasedPlot):
         self.rel(x='weekofyear', y='total_cases')
         self.box(col='weekofyear', title='weekofyear distribution')
 
+    def month(self):
+        self.rel(x='month', y='total_cases')
+        self.box(col='month', title='month distribution')
+
+
+
     def week_start_date(self):
         self.rel(x='week_start_date', y='total_cases')
         self.box(col='week_start_date', title='week_start_date distribution')

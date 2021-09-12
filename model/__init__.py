@@ -7,3 +7,6 @@ from model.svm import SVM
 from model.knn import KNN
 from model.mlp import MLP
 from model.xgboost import XGBOOST
+from model.lightgbm import LightGBM
+from model.catboost import CatBoost
+from model.linear_regression import LinearRegression

@@ -8,3 +8,6 @@ class Model:
     KNN = 4
     MLP = 5
     XGBOOST = 6
+    LIGHTGBM = 7
+    CATBOOST = 8
+    LINEAR_REGRESSION = 9

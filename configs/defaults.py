@@ -18,8 +18,8 @@ _C = CN()
 # -----------------------------------------------------------------------------
 _C.BASIC = CN()
 _C.BASIC.SEED = 2021
-_C.BASIC.PCA = False  # pca = True will apply principal component analysis to data
-_C.BASIC.TRANSFORMATION = False
+_C.BASIC.PCA = True  # pca = True will apply principal component analysis to data
+_C.BASIC.TRANSFORMATION = True
 _C.BASIC.RAND_STATE = 2021
 _C.BASIC.OUTPUT = '../output/'
 _C.BASIC.SAVE_MODEL = '../output/model.joblib'
@@ -81,9 +81,11 @@ _C.DATASET.DROP_COLS = (
     'min_temp_c',
     'precip_mm',
     # 'total_cases',
-    'city',
+    # 'city',
     # 'season',
-    'month',
+    # 'month',
+    # "six",
+    'quarter',
     'PERSIANN_precip_mm_no_nans',
     'NCEP_avg_temp_c',
     'NCEP_avg_temp_c_no_nans',
@@ -222,9 +224,9 @@ _C.SVM.RANDOM_STATE = _C.BASIC.RAND_STATE  # int or RandomState instance, defaul
 _C.SVR = CN()
 _C.SVR.NAME = 'SVM'
 
-_C.SVR.KERNEL = 'rbf'  # {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'}, default='rbf'
+_C.SVR.KERNEL = 'poly'  # {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'}, default='rbf'
 _C.SVR.DEGREE = 3  # int, default=3
-_C.SVR.GAMMA = 'scale'  # {'scale', 'auto'} or float, default='scale'
+_C.SVR.GAMMA = 'auto'  # {'scale', 'auto'} or float, default='scale'
 _C.SVR.COEF0 = 0.0  # float, default=0.0
 _C.SVR.TOL = 1e-3  # float, default=1e-3
 _C.SVR.C = 1.0  # float, default=1.0
@@ -398,21 +400,21 @@ _C.KNNC.HYPER_PARAM_TUNING.N_JOBS = None
 
 _C.KNNR = CN()
 _C.KNNR.NAME = 'KNNClassifier'
-_C.KNNR.N_NEIGHBORS = 5  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
+_C.KNNR.N_NEIGHBORS = 6  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
 _C.KNNR.WEIGHTS = 'distance'  # weights : {'uniform', 'distance'} or callable, default='uniform'
 _C.KNNR.ALGORITHM = 'brute'  # algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
-_C.KNNR.LEAF_SIZE = 100  # leaf_size : int, default=30
+_C.KNNR.LEAF_SIZE = 10  # leaf_size : int, default=30
 _C.KNNR.P = 1  # p : int, default=2 Power parameter for the Minkowski metric.
 _C.KNNR.METRIC = 'minkowski'  # metric : str or callable, default='minkowski'
 _C.KNNR.METRIC_PARAMS = None  # metric_params : dict, default=None
 _C.KNNR.N_JOBS = -1  # n_jobs : int, default=None
 
 _C.KNNR.HYPER_PARAM_TUNING = CN()
-_C.KNNR.HYPER_PARAM_TUNING.N_NEIGHBORS = None
-_C.KNNR.HYPER_PARAM_TUNING.WEIGHTS = None
-_C.KNNR.HYPER_PARAM_TUNING.ALGORITHM = None
-_C.KNNR.HYPER_PARAM_TUNING.LEAF_SIZE = None
-_C.KNNR.HYPER_PARAM_TUNING.P = None
+_C.KNNR.HYPER_PARAM_TUNING.N_NEIGHBORS = [2,3,4,5,6,7,8,9,10]
+_C.KNNR.HYPER_PARAM_TUNING.WEIGHTS = ['distance','uniform']
+_C.KNNR.HYPER_PARAM_TUNING.ALGORITHM = ['auto', 'ball_tree', 'kd_tree', 'brute']
+_C.KNNR.HYPER_PARAM_TUNING.LEAF_SIZE = [10,20,30,50,70,100]
+_C.KNNR.HYPER_PARAM_TUNING.P = [1,2,3]
 _C.KNNR.HYPER_PARAM_TUNING.METRIC = None
 _C.KNNR.HYPER_PARAM_TUNING.METRIC_PARAMS = None
 _C.KNNR.HYPER_PARAM_TUNING.N_JOBS = None
@@ -421,11 +423,11 @@ _C.KNNR.HYPER_PARAM_TUNING.N_JOBS = None
 _C.MLP = CN()
 _C.MLP.NAME = 'MLP'
 _C.MLP.HIDDEN_LAYER_SIZES = (100,)  # hidden_layer_sizes: tuple, length = n_layers - 2, default=(100,)
-_C.MLP.ACTIVATION = 'relu'  # activation : {'identity', 'logistic', 'tanh', 'relu'}, default='relu'
-_C.MLP.SOLVER = 'sgd'  # solver : {'lbfgs', 'sgd', 'adam'}, default='adam'
-_C.MLP.ALPHA = 0.0001  # alpha : float, default=0.0001
+_C.MLP.ACTIVATION = 'tanh'  # activation : {'identity', 'logistic', 'tanh', 'relu'}, default='relu'
+_C.MLP.SOLVER = 'adam'  # solver : {'lbfgs', 'sgd', 'adam'}, default='adam'
+_C.MLP.ALPHA = 0.001  # alpha : float, default=0.0001
 _C.MLP.BATCH_SIZE = 'auto'  # batch_size : int, default='auto'
-_C.MLP.LEARNING_RATE = 'constant'  # learning_rate : {'constant', 'invscaling', 'adaptive'}, default='constant'
+_C.MLP.LEARNING_RATE = 'adaptive'  # learning_rate : {'constant', 'invscaling', 'adaptive'}, default='constant'
 _C.MLP.LEARNING_RATE_INIT = 0.001  # learning_rate_init : double, default=0.001
 _C.MLP.POWER_T = 0.5  # power_t : double, default=0.5
 _C.MLP.MAX_ITER = 2000  # max_iter : int, default=200
@@ -493,15 +495,13 @@ _C.XGBOOST.REG_LAMBDA = 0.9  # reg_lambda : L2 regularization term on weights
 _C.XGBOOST.SCALE_POS_WEIGHT = None  # scale_pos_weight : Balancing of positive and negative weights.
 _C.XGBOOST.BASE_SCORE = None  # base_score: The initial prediction score of all instances, global bias.
 _C.XGBOOST.RANDOM_STATE = _C.BASIC.RAND_STATE  # random_state : Random number seed.
-_C.XGBOOST.MISSING = None  #  missing : Value in the data which needs to be present as a missing value.  float, default np.nan
+_C.XGBOOST.MISSING = None  # missing : Value in the data which needs to be present as a missing value.  float, default np.nan
 _C.XGBOOST.NUM_PARALLEL_TREE = None  # num_parallel_tree: Used for boosting random forest.
 _C.XGBOOST.MONOTONE_CONSTRAINTS = None  # monotone_constraints : Constraint of variable monotonicity.
 _C.XGBOOST.INTERACTION_CONSTRAINTS = None  # interaction_constraints :  Constraints for interaction representing permitted interactions.
 _C.XGBOOST.IMPORTANCE_TYPE = "gain"  # importance_type:  The feature importance type for the feature_importances either "gain", "weight", "cover", "total_gain" or "total_cover".
 _C.XGBOOST.GPU_ID = None  #
 _C.XGBOOST.VALIDATE_PARAMETERS = None  #
-
-
 
 _C.XGBOOST.HYPER_PARAM_TUNING = CN()
 _C.XGBOOST.HYPER_PARAM_TUNING.N_ESTIMATORS = None
@@ -530,3 +530,62 @@ _C.XGBOOST.HYPER_PARAM_TUNING.INTERACTION_CONSTRAINTS = None
 _C.XGBOOST.HYPER_PARAM_TUNING.IMPORTANCE_TYPE = None
 _C.XGBOOST.HYPER_PARAM_TUNING.GPU_ID = None
 _C.XGBOOST.HYPER_PARAM_TUNING.VALIDATE_PARAMETERS = None
+# ----------------------------------------------------------------------------
+_C.LIGHTGBM = CN()
+_C.LIGHTGBM.NAME = 'LIGHTGBM'
+_C.LIGHTGBM.BOOSTING_TYPE = 'gbdt'  # boosting_type : string, optional (default='gbdt') dart goss rf
+_C.LIGHTGBM.NUM_LEAVES = 50  # num_leaves : int, optional (default=31)
+_C.LIGHTGBM.MAX_DEPTH = -1  # max_depth : int, optional (default=-1)
+_C.LIGHTGBM.LEARNING_RATE = 0.1  # learning_rate : float, optional (default=0.1)
+_C.LIGHTGBM.N_ESTIMATORS = 1500  # n_estimators : int, optional (default=100)
+_C.LIGHTGBM.RANDOM_STATE = _C.BASIC.RAND_STATE
+
+_C.LIGHTGBM.HYPER_PARAM_TUNING = CN()
+_C.LIGHTGBM.HYPER_PARAM_TUNING.BOOSTING_TYPE = None
+_C.LIGHTGBM.HYPER_PARAM_TUNING.NUM_LEAVES = None
+_C.LIGHTGBM.HYPER_PARAM_TUNING.MAX_DEPTH = None
+_C.LIGHTGBM.HYPER_PARAM_TUNING.LEARNING_RATE = None
+_C.LIGHTGBM.HYPER_PARAM_TUNING.N_ESTIMATORS = None
+# ----------------------------------------------------------------------------
+_C.CATBOOST = CN()
+_C.CATBOOST.NAME = 'catboost'
+_C.CATBOOST.ITERATIONS = 500  # iterations : int, [default=500]
+_C.CATBOOST.LEARNING_RATE = 0.1  # learning_rate : float,
+_C.CATBOOST.DEPTH = 16  # depth : int, [default=6] Depth of a tree. All trees are the same depth.
+_C.CATBOOST.L2_LEAF_REG = 3.0  # l2_leaf_reg : float, [default=3.0] Coefficient at the L2 regularization term of the cost function.
+_C.CATBOOST.LOSS_FUNCTION = 'MAE'  # loss_function : string, [default='RMSE'] 'RMSE' 'MAE' 'Quantile:alpha=value' 'LogLinQuantile:alpha=value' 'Poisson' 'MAPE' 'Lq:q=value' The metric to use in training and also selector of the machine learning  [default='Logloss']
+_C.CATBOOST.RANDOM_SEED = _C.BASIC.RAND_STATE  # random_seed : int, [default=None] Random number seed.
+_C.CATBOOST.USE_BEST_MODEL = False  # use_best_model : bool, [default=None] To limit the number of trees in predict() using information about the optimal value of the error function.
+_C.CATBOOST.VERBOSE = True  # verbose: bool
+_C.CATBOOST.EVAL_METRIC = None  # eval_metric : string or object, [default=None] To optimize your custom metric in loss.
+_C.CATBOOST.BOOSTING_TYPE = 'Plain'  # boosting_type : string, default value depends on object count and feature count in train dataset and on learning mode. - 'Ordered' - Gives better quality, but may slow down the training.  - 'Plain' - The classic gradient boosting scheme. May result in quality degradation, but does not slow down the training.
+_C.CATBOOST.TASK_TYPE = 'CPU'  # task_type : string, [default=None]  - 'CPU' - 'GPU'
+_C.CATBOOST.N_ESTIMATORS = 500  # n_estimators : int, synonym for iterations.
+_C.CATBOOST.CAT_FEATURES = ['city']  # cat_features : list or numpy.ndarray, [default=None]
+
+_C.CATBOOST.HYPER_PARAM_TUNING = CN()
+_C.CATBOOST.HYPER_PARAM_TUNING.ITERATIONS = None
+_C.CATBOOST.HYPER_PARAM_TUNING.LEARNING_RATE = None
+_C.CATBOOST.HYPER_PARAM_TUNING.DEPTH = None
+_C.CATBOOST.HYPER_PARAM_TUNING.L2_LEAF_REG = None
+_C.CATBOOST.HYPER_PARAM_TUNING.LOSS_FUNCTION = None
+_C.CATBOOST.HYPER_PARAM_TUNING.RANDOM_SEED = None
+_C.CATBOOST.HYPER_PARAM_TUNING.USE_BEST_MODEL = None
+_C.CATBOOST.HYPER_PARAM_TUNING.VERBOSE = None
+_C.CATBOOST.HYPER_PARAM_TUNING.EVAL_METRIC = None
+_C.CATBOOST.HYPER_PARAM_TUNING.BOOSTING_TYPE = None
+_C.CATBOOST.HYPER_PARAM_TUNING.TASK_TYPE = None
+_C.CATBOOST.HYPER_PARAM_TUNING.N_ESTIMATORS = None
+_C.CATBOOST.HYPER_PARAM_TUNING.CAT_FEATURES = None
+# ----------------------------------------------------------------------------
+_C.LR = CN()
+_C.LR.NAME = 'LR'
+_C.LR.FIT_INTERCEPT = True  #  fit_intercept : bool, default=True
+_C.LR.NORMALIZE = False  #  normalize : bool, default=False
+_C.LR.COPY_X = True  # copy_X : bool, default=True
+_C.LR.N_JOBS = -1  # learning_rate : float,
+
+_C.LR.HYPER_PARAM_TUNING = CN()
+_C.LR.HYPER_PARAM_TUNING.FIT_INTERCEPT = None
+_C.LR.HYPER_PARAM_TUNING.NORMALIZE = None
+_C.LR.HYPER_PARAM_TUNING.COPY_X = None

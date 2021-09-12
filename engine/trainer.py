@@ -76,8 +76,7 @@ def do_train(cfg, model: BasedModel, dataset: BasedDataset, encoder: Encoders, s
 
 def do_cross_val(cfg, model: BasedModel, dataset: BasedDataset, encoder: Encoders, scaler: Scalers, pca: PCA):
     # encode target values
-    _y = encoder.custom_encoding(dataset.df, col=cfg.DATASET.TARGET,
-                                 encode_type=cfg.ENCODER.Y)
+    _y = dataset.df[dataset.target_col]
     _X = dataset.df.drop(dataset.target_col, axis=1)
 
     if cfg.BASIC.TRANSFORMATION:
@@ -128,4 +127,4 @@ def do_fine_tune(cfg, model: BasedModel, dataset: BasedDataset, encoder: Encoder
     # change the scale of data
     _X_train, _X_val = scaler.do_scale(X_train=_X_train, X_test=_X_val)
     # run tuning
-    model.hyper_parameter_tuning(X=_X_train, y=_y_train, title=model.name, method=method)
+    model.hyper_parameter_tuning(X=_X_val, y=_y_val, title=model.name, method=method)

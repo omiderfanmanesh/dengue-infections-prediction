@@ -91,6 +91,8 @@ class BasedModel:
                 return 'recall'
             elif metric_type == MetricTypes.ACCURACY:
                 return 'accuracy'
+            elif metric_type == MetricTypes.MEAN_ABSOLUTE_ERROR:
+                return 'neg_mean_absolute_error'
         else:
             if metric_type == MetricTypes.F1_SCORE_BINARY:
                 return f1_score(y_true, y_pred, average="binary")
