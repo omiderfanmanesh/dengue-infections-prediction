@@ -399,8 +399,8 @@ _C.KNNR = CN()
 _C.KNNR.NAME = 'KNNClassifier'
 _C.KNNR.N_NEIGHBORS = 5  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
 _C.KNNR.WEIGHTS = 'distance'  # weights : {'uniform', 'distance'} or callable, default='uniform'
-_C.KNNR.ALGORITHM = 'auto'  # algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
-_C.KNNR.LEAF_SIZE = 30  # leaf_size : int, default=30
+_C.KNNR.ALGORITHM = 'brute'  # algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
+_C.KNNR.LEAF_SIZE = 100  # leaf_size : int, default=30
 _C.KNNR.P = 1  # p : int, default=2 Power parameter for the Minkowski metric.
 _C.KNNR.METRIC = 'minkowski'  # metric : str or callable, default='minkowski'
 _C.KNNR.METRIC_PARAMS = None  # metric_params : dict, default=None
