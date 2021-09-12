@@ -397,7 +397,7 @@ _C.KNNC.HYPER_PARAM_TUNING.N_JOBS = None
 
 _C.KNNR = CN()
 _C.KNNR.NAME = 'KNNClassifier'
-_C.KNNR.N_NEIGHBORS = 2  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
+_C.KNNR.N_NEIGHBORS = 5  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
 _C.KNNR.WEIGHTS = 'distance'  # weights : {'uniform', 'distance'} or callable, default='uniform'
 _C.KNNR.ALGORITHM = 'auto'  # algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
 _C.KNNR.LEAF_SIZE = 30  # leaf_size : int, default=30
