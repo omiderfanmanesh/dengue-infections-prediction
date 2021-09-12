@@ -82,7 +82,7 @@ _C.DATASET.DROP_COLS = (
     'precip_mm',
     # 'total_cases',
     # 'city',
-    # 'month',
+    'month',
     'PERSIANN_precip_mm_no_nans',
     'NCEP_avg_temp_c',
     'NCEP_avg_temp_c_no_nans',
