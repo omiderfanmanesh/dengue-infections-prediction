@@ -18,7 +18,7 @@ _C = CN()
 # -----------------------------------------------------------------------------
 _C.BASIC = CN()
 _C.BASIC.SEED = 2021
-_C.BASIC.PCA = True  # pca = True will apply principal component analysis to data
+_C.BASIC.PCA = False  # pca = True will apply principal component analysis to data
 _C.BASIC.TRANSFORMATION = True
 _C.BASIC.RAND_STATE = 2021
 _C.BASIC.OUTPUT = '../output/'
@@ -384,7 +384,7 @@ _C.DECISION_TREE.HYPER_PARAM_TUNING.CCP_ALPHA = None
 # ----------------------------------------------------------------------------
 _C.KNNC = CN()
 _C.KNNC.NAME = 'KNNClassifier'
-_C.KNNC.N_NEIGHBORS = 5  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
+_C.KNNC.N_NEIGHBORS = 8  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
 _C.KNNC.WEIGHTS = 'uniform'  # weights : {'uniform', 'distance'} or callable, default='uniform'
 _C.KNNC.ALGORITHM = 'auto'  # algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
 _C.KNNC.LEAF_SIZE = 30  # leaf_size : int, default=30
