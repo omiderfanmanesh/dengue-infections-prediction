@@ -62,7 +62,7 @@ _C.DATASET.HAS_CATEGORICAL_TARGETS = False  # True = if you have a categorical t
 _C.DATASET.DROP_COLS = (
 
     # 'year',
-    # 'weekofyear',
+    'weekofyear',
     'week_start_date',
     'PERSIANN_precip_mm',
     'NCEP_air_temp_k',
@@ -83,8 +83,13 @@ _C.DATASET.DROP_COLS = (
     # 'total_cases',
     # 'city',
     # 'season',
-    # 'month',
+    'month',
     # "six",
+    # 'week_split',
+    # 'weekofyear_sin',
+    # 'weekofyear_cos',
+    'month_sin',
+    'month_cos',
     'quarter',
     'PERSIANN_precip_mm_no_nans',
     'NCEP_avg_temp_c',
@@ -400,9 +405,9 @@ _C.KNNC.HYPER_PARAM_TUNING.N_JOBS = None
 
 _C.KNNR = CN()
 _C.KNNR.NAME = 'KNNClassifier'
-_C.KNNR.N_NEIGHBORS = 6  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
+_C.KNNR.N_NEIGHBORS = 7  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
 _C.KNNR.WEIGHTS = 'distance'  # weights : {'uniform', 'distance'} or callable, default='uniform'
-_C.KNNR.ALGORITHM = 'brute'  # algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
+_C.KNNR.ALGORITHM = 'auto'  # algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
 _C.KNNR.LEAF_SIZE = 10  # leaf_size : int, default=30
 _C.KNNR.P = 1  # p : int, default=2 Power parameter for the Minkowski metric.
 _C.KNNR.METRIC = 'minkowski'  # metric : str or callable, default='minkowski'
@@ -422,13 +427,13 @@ _C.KNNR.HYPER_PARAM_TUNING.N_JOBS = None
 # ----------------------------------------------------------------------------
 _C.MLP = CN()
 _C.MLP.NAME = 'MLP'
-_C.MLP.HIDDEN_LAYER_SIZES = (100,)  # hidden_layer_sizes: tuple, length = n_layers - 2, default=(100,)
-_C.MLP.ACTIVATION = 'tanh'  # activation : {'identity', 'logistic', 'tanh', 'relu'}, default='relu'
-_C.MLP.SOLVER = 'adam'  # solver : {'lbfgs', 'sgd', 'adam'}, default='adam'
-_C.MLP.ALPHA = 0.001  # alpha : float, default=0.0001
+_C.MLP.HIDDEN_LAYER_SIZES = (500,)  # hidden_layer_sizes: tuple, length = n_layers - 2, default=(100,)
+_C.MLP.ACTIVATION = 'relu'  # activation : {'identity', 'logistic', 'tanh', 'relu'}, default='relu'
+_C.MLP.SOLVER = 'sgd'  # solver : {'lbfgs', 'sgd', 'adam'}, default='adam'
+_C.MLP.ALPHA = 0.009  # alpha : float, default=0.0001
 _C.MLP.BATCH_SIZE = 'auto'  # batch_size : int, default='auto'
-_C.MLP.LEARNING_RATE = 'adaptive'  # learning_rate : {'constant', 'invscaling', 'adaptive'}, default='constant'
-_C.MLP.LEARNING_RATE_INIT = 0.001  # learning_rate_init : double, default=0.001
+_C.MLP.LEARNING_RATE = 'constant'  # learning_rate : {'constant', 'invscaling', 'adaptive'}, default='constant'
+_C.MLP.LEARNING_RATE_INIT = 0.01  # learning_rate_init : double, default=0.001
 _C.MLP.POWER_T = 0.5  # power_t : double, default=0.5
 _C.MLP.MAX_ITER = 2000  # max_iter : int, default=200
 _C.MLP.SHUFFLE = True  # shuffle : bool, default=True
@@ -561,7 +566,7 @@ _C.CATBOOST.EVAL_METRIC = None  # eval_metric : string or object, [default=None]
 _C.CATBOOST.BOOSTING_TYPE = 'Plain'  # boosting_type : string, default value depends on object count and feature count in train dataset and on learning mode. - 'Ordered' - Gives better quality, but may slow down the training.  - 'Plain' - The classic gradient boosting scheme. May result in quality degradation, but does not slow down the training.
 _C.CATBOOST.TASK_TYPE = 'CPU'  # task_type : string, [default=None]  - 'CPU' - 'GPU'
 _C.CATBOOST.N_ESTIMATORS = 500  # n_estimators : int, synonym for iterations.
-_C.CATBOOST.CAT_FEATURES = ['city']  # cat_features : list or numpy.ndarray, [default=None]
+_C.CATBOOST.CAT_FEATURES = None  # cat_features : list or numpy.ndarray, [default=None]
 
 _C.CATBOOST.HYPER_PARAM_TUNING = CN()
 _C.CATBOOST.HYPER_PARAM_TUNING.ITERATIONS = None

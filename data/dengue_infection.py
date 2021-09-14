@@ -17,8 +17,11 @@ class DengueInfection(BasedDataset):
         self.extract_month()
         self.extract_quarter()
         self.week_start_date()
-        self.six_month()
-
+        # self.six_month()
+        # self.week_split()
+        self.city()
+        self.cyclic_encoder(col='weekofyear',max_val=53)
+        self.cyclic_encoder(col='month', max_val=12)
         self.persiann_precip_mm()
 
         self.ncep_avg_temp_k()
@@ -33,6 +36,11 @@ class DengueInfection(BasedDataset):
         self.max_temp_c()
         self.min_temp_c()
         self.precip_mm()
+
+    def cyclic_encoder(self, col, max_val):
+        self.df[col + '_sin'] = np.sin(2 * np.pi *  self.df[col] / max_val)
+        self.df[col + '_cos'] = np.cos(2 * np.pi *  self.df[col] / max_val)
+        return  self.df
 
     def fill_nan(self, col):
         table = pd.pivot_table(self.df, values=col, index=['year', 'month'],
@@ -58,6 +66,9 @@ class DengueInfection(BasedDataset):
 
     def extract_quarter(self):
         self.df['quarter'] = self.df['week_start_date'].dt.quarter
+
+    def week_split(self):
+        self.df['week_split'] = self.df['weekofyear'].apply(lambda x: 0 if x < 25 else 1)
 
     def season_of_date(date):
         year = str(date.year)
@@ -156,5 +167,5 @@ class DengueInfection(BasedDataset):
         pass
 
     def city(self):
-        # self.df = self.df[self.df['city'] != 'sj']
-        pass
+        self.df = self.df[self.df['city'] != 'sj']
+
