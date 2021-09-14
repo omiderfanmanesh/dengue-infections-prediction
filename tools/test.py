@@ -33,7 +33,7 @@ def main():
     enc = joblib.load('../output/city_binary_encoding_4.joblib')  # initialize Encoder object
     scl = joblib.load('../output/min_max_scaler_1.joblib')  # initialize scaler object
 
-    den.df = encoder.encode_by_enc(enc=enc, data=den.df)
+    # den.df = encoder.encode_by_enc(enc=enc, data=den.df)
     den.df = scaler.scale_by_scl(scl=scl, data=den.df)
 
     pca = None

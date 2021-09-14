@@ -14,6 +14,8 @@ class DengueInfection(BasedDataset):
     def __init__(self, cfg, development):
         super(DengueInfection, self).__init__(cfg=cfg, dataset_type=FileTypes.TSV, development=development)
 
+        if development:
+            self.total_cases()
         self.extract_month()
         self.extract_quarter()
         self.week_start_date()
@@ -36,6 +38,8 @@ class DengueInfection(BasedDataset):
         self.max_temp_c()
         self.min_temp_c()
         self.precip_mm()
+
+
 
     def cyclic_encoder(self, col, max_val):
         self.df[col + '_sin'] = np.sin(2 * np.pi *  self.df[col] / max_val)
@@ -164,7 +168,7 @@ class DengueInfection(BasedDataset):
         self.fill_nan(col='precip_mm')
 
     def total_cases(self):
-        pass
+        self.df = self.df[self.df['total_cases'] < 41]
 
     def city(self):
         self.df = self.df[self.df['city'] != 'sj']

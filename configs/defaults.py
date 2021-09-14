@@ -81,7 +81,7 @@ _C.DATASET.DROP_COLS = (
     'min_temp_c',
     'precip_mm',
     # 'total_cases',
-    # 'city',
+    'city',
     # 'season',
     'month',
     # "six",
@@ -384,11 +384,11 @@ _C.DECISION_TREE.HYPER_PARAM_TUNING.CCP_ALPHA = None
 # ----------------------------------------------------------------------------
 _C.KNNC = CN()
 _C.KNNC.NAME = 'KNNClassifier'
-_C.KNNC.N_NEIGHBORS = 8  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
-_C.KNNC.WEIGHTS = 'uniform'  # weights : {'uniform', 'distance'} or callable, default='uniform'
-_C.KNNC.ALGORITHM = 'auto'  # algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
-_C.KNNC.LEAF_SIZE = 30  # leaf_size : int, default=30
-_C.KNNC.P = 2  # p : int, default=2 Power parameter for the Minkowski metric.
+_C.KNNC.N_NEIGHBORS = 4  # n_neighbors : int, default=5 Number of neighbors to use by default for :meth:`kneighbors` queries.
+_C.KNNC.WEIGHTS = 'distance'  # weights : {'uniform', 'distance'} or callable, default='uniform'
+_C.KNNC.ALGORITHM = 'brute'  # algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
+_C.KNNC.LEAF_SIZE = 10  # leaf_size : int, default=30
+_C.KNNC.P = 1  # p : int, default=2 Power parameter for the Minkowski metric.
 _C.KNNC.METRIC = 'minkowski'  # metric : str or callable, default='minkowski'
 _C.KNNC.METRIC_PARAMS = None  # metric_params : dict, default=None
 _C.KNNC.N_JOBS = -1  # n_jobs : int, default=None
